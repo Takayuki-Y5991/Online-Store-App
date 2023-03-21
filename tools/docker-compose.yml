@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  postgres-forum:
+    image: postgres:15-alpine
+    container_name: postgres-online-store
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/var/lib/postgres/data
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=online-store

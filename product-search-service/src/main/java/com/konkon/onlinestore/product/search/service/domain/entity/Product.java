@@ -1,16 +1,21 @@
 package com.konkon.onlinestore.product.search.service.domain.entity;
 
-import com.konkon.onlinestore.product.search.service.domain.value.Category;
-import com.konkon.onlinestore.product.search.service.domain.value.ProductId;
+import com.konkon.onlinestore.product.search.service.domain.value.Price;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
-public class Product{
-    private ProductId id;
+@Getter
+@Builder
+@AllArgsConstructor
+public class Product {
+    private UUID id;
     private String name;
     private String description;
-    private BigDecimal price;
+    private Price price;
     private String imageUrl;
-    private List<Category> category;
+    private Set<Category> categories;
 }

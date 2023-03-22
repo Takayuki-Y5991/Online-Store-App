@@ -1,11 +1,9 @@
-package com.konkon.onlinestore.product.search.service.infrastructure.repository.extensions;
+package com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.extensions;
 
 import com.konkon.onlinestore.product.search.service.domain.entity.Product;
-import com.konkon.onlinestore.product.search.service.domain.value.ProductId;
-import com.konkon.onlinestore.product.search.service.infrastructure.entity.ProductEntity;
-import com.konkon.onlinestore.product.search.service.infrastructure.mapper.ProductMapper;
-import com.konkon.onlinestore.product.search.service.infrastructure.repository.ProductRepository;
-
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.entity.ProductEntity;
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.mapper.ProductMapper;
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.ProductRepository;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -27,7 +25,7 @@ public class ProductRepositoryImpl implements PanacheRepository<ProductEntity>, 
 
 
     @Override
-    public Uni<Product> searchProduct(ProductId productId) {
+    public Uni<Product> searchProduct(UUID productId) {
         var result = find("productId", productId).firstResult();
         return result.map(productMapper::toDomain);
     }

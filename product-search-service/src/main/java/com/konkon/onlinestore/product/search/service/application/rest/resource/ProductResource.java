@@ -1,9 +1,8 @@
-package com.konkon.onlinestore.product.search.service.api.resource;
+package com.konkon.onlinestore.product.search.service.application.rest.resource;
 
-import com.konkon.onlinestore.product.search.service.api.converter.ProductConverter;
-import com.konkon.onlinestore.product.search.service.api.model.ProductResponse;
+import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductConverter;
+import com.konkon.onlinestore.product.search.service.application.rest.model.ProductResponse;
 import com.konkon.onlinestore.product.search.service.domain.usecase.ProductUseCase;
-import com.konkon.onlinestore.product.search.service.domain.value.ProductId;
 import io.smallrye.mutiny.Uni;
 
 import javax.inject.Inject;
@@ -30,8 +29,8 @@ public class ProductResource {
     @Path("/productId")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<ProductResponse> searchProducts(@PathParam("productId") String productId) {
-        return productUseCase.searchProduct(new ProductId(UUID.fromString(productId)))
+        return productUseCase.searchProduct(UUID.fromString(productId))
                 .onItem().transform(productConverter::toResponse);
-        
+
     }
 }

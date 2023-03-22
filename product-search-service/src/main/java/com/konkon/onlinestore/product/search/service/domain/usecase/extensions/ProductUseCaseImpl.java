@@ -2,12 +2,12 @@ package com.konkon.onlinestore.product.search.service.domain.usecase.extensions;
 
 import com.konkon.onlinestore.product.search.service.domain.entity.Product;
 import com.konkon.onlinestore.product.search.service.domain.usecase.ProductUseCase;
-import com.konkon.onlinestore.product.search.service.domain.value.ProductId;
-import com.konkon.onlinestore.product.search.service.infrastructure.repository.ProductRepository;
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.ProductRepository;
 import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.UUID;
 
 @ApplicationScoped
 public class ProductUseCaseImpl implements ProductUseCase {
@@ -20,7 +20,7 @@ public class ProductUseCaseImpl implements ProductUseCase {
     }
 
     @Override
-    public Uni<Product> searchProduct(ProductId productId) {
+    public Uni<Product> searchProduct(UUID productId) {
         return productRepository.searchProduct(productId);
     }
 }

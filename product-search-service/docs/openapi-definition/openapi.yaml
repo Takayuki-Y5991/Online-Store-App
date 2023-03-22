@@ -1,0 +1,53 @@
+---
+openapi: 3.0.3
+info:
+  title: OpenAPI Definition Example
+  version: 0.0.1
+servers:
+- url: http://localhost:9001
+  description: Auto generated value
+- url: http://0.0.0.0:9001
+  description: Auto generated value
+paths:
+  /api/products/productId:
+    get:
+      tags:
+      - Product Resource
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+components:
+  schemas:
+    CategoryResponse:
+      type: object
+      properties:
+        categoryId:
+          format: int64
+          type: integer
+        categoryName:
+          type: string
+    ProductResponse:
+      type: object
+      properties:
+        productId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        price:
+          type: number
+        description:
+          type: string
+        imageUrl:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryResponse'
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string

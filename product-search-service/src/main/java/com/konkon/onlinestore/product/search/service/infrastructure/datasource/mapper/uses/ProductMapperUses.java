@@ -6,12 +6,10 @@ import com.konkon.onlinestore.product.search.service.infrastructure.datasource.e
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.mapper.CategoryMapper;
 import org.mapstruct.Named;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 
 @Named("ProductMapperUses")
-@ApplicationScoped
 public class ProductMapperUses {
 
     private final CategoryMapper categoryMapper;

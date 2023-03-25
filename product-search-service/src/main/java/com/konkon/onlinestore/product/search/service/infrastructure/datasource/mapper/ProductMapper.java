@@ -10,11 +10,9 @@ import org.mapstruct.Mapping;
         uses = ProductMapperUses.class)
 public interface ProductMapper {
 
-    @Mapping(source = "price", target = "price", qualifiedByName = {"ProductMapperUses", "toPrice"})
+    @Mapping(source = "price", target = "price.value", qualifiedByName = {"ProductMapperUses", "toPrice"})
     @Mapping(source = "category", target = "category", qualifiedByName = {"ProductMapperUses", "toCategory"})
     Product toDomain(ProductEntity entity);
 
-    @Mapping(target = "price", qualifiedByName = {"ProductMapperUses", "fromPrice"})
-    @Mapping(target = "category", qualifiedByName = {"ProductMapperUses", "fromCategory"})
     ProductEntity toEntity(Product domain);
 }

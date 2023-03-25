@@ -4,11 +4,12 @@ import com.konkon.onlinestore.product.search.service.domain.value.Price;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class Product {
@@ -17,5 +18,5 @@ public class Product {
     private String description;
     private Price price;
     private String imageUrl;
-    private Set<Category> categories;
+    private Category category;
 }

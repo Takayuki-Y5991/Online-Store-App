@@ -2,6 +2,7 @@ package com.konkon.onlinestore.product.search.service.infrastructure.datasource.
 
 import com.konkon.onlinestore.product.search.service.domain.entity.Product;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.config.DatabaseClientProvider;
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.config.PgPoolTransaction;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.entity.CategoryEntity;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.entity.ProductEntity;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.ProductRepository;
@@ -41,6 +42,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? toProduct(iterator.next()) : null)
                 .onItem().transform(entity -> ObjectUtils.isNotEmpty(entity) ? productTranslator.toDomain(entity) : null);
+    }
+
+    @Override
+    public Uni<Product> searchProduct(UUID productId, PgPoolTransaction tx) {
+        return;
     }
 
     @Override

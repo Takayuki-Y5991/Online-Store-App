@@ -1,24 +1,23 @@
 package com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository;
 
 import com.konkon.onlinestore.product.search.service.domain.entity.Product;
-import com.konkon.onlinestore.product.search.service.infrastructure.datasource.config.PgPoolTransaction;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.sqlclient.SqlClient;
 
-import java.util.Map;
 import java.util.UUID;
 
 public interface ProductRepository {
 
     Uni<Product> searchProduct(UUID productId);
 
-    Uni<Product> searchProduct(UUID productId, PgPoolTransaction tx);
+    Uni<Product> searchProduct(UUID productId, SqlClient client);
 
-    Multi<Product> searchProducts(Map<String, String> query);
+    Multi<Product> searchProducts(String sortKey, String order, int limit, int offset);
 
-    Uni<Product> createProduct(Product product);
+    Uni<Product> createProduct(Product product, SqlClient client);
 
-    Uni<Boolean> deleteProduct(UUID uuid);
+    Uni<Boolean> deleteProduct(UUID productId, SqlClient client);
 
-    Uni<Product> updateProduct(Product product);
+    Uni<Product> updateProduct(Product product, SqlClient client);
 }

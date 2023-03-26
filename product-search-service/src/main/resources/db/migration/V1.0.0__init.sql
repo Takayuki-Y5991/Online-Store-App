@@ -12,7 +12,7 @@ CREATE TABLE accounts (
 -- product-search-service
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE products (
@@ -20,7 +20,10 @@ CREATE TABLE products (
     name VARCHAR(100) NOT NULL,
     price NUMERIC NOT NULL,
     description TEXT NOT NULL,
-    image_url VARCHAR(255) NOT NULL
+    image_url VARCHAR(255) NOT NULL,
+    category_id INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE TABLE reviews (
@@ -33,10 +36,4 @@ CREATE TABLE reviews (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     CHECK(rating >= 1 AND rating <= 5)
-);
-
-CREATE TABLE product_categories (
-    product_id UUID REFERENCES products(id) ON DELETE CASCADE,
-    category_id INT REFERENCES categories(id) ON DELETE CASCADE,
-    PRIMARY KEY (product_id, category_id)
 );

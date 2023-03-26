@@ -27,6 +27,7 @@ public class ProductTranslatorImpl implements ProductTranslator {
                 .price(new Price(entity.getPrice()))
                 .description(entity.getDescription())
                 .imageUrl(entity.getImageUrl())
+                .version(entity.getVersion())
                 .category(categoryTranslator.toDomain(entity.getCategory()))
                 .build();
     }
@@ -39,6 +40,7 @@ public class ProductTranslatorImpl implements ProductTranslator {
                 .price(domain.getPrice().value())
                 .description(domain.getDescription())
                 .imageUrl(domain.getImageUrl())
+                .version(domain.getVersion())
                 .category(categoryTranslator.toEntity(domain.getCategory()))
                 .build();
     }

@@ -7,6 +7,7 @@ import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -21,6 +22,7 @@ public class ProductUseCaseImpl implements ProductUseCase {
 
     @Override
     public Uni<Product> searchProduct(UUID productId) {
-        return productRepository.searchProduct(productId);
+        return productRepository.searchProduct(productId)
+                .onItem().ifNull().failWith(() -> new NotFoundException("Product not found"));
     }
 }

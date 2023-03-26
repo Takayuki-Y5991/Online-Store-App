@@ -36,7 +36,7 @@
         "type" : "object",
         "properties" : {
           "categoryId" : {
-            "format" : "int64",
+            "format" : "int32",
             "type" : "integer"
           },
           "categoryName" : {
@@ -62,11 +62,8 @@
           "imageUrl" : {
             "type" : "string"
           },
-          "categories" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/CategoryResponse"
-            }
+          "category" : {
+            "$ref" : "#/components/schemas/CategoryResponse"
           }
         }
       },

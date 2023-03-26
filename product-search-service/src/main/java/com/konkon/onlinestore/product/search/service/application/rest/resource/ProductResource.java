@@ -30,7 +30,7 @@ public class ProductResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<ProductResponse> searchProducts(@PathParam("productId") String productId) {
         return productUseCase.searchProduct(UUID.fromString(productId))
-                .onItem().transform(null);
+                .onItem().transform(productConverter::toResponse);
 
     }
 }

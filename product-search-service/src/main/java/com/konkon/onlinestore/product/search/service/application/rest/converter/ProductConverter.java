@@ -1,8 +1,8 @@
 package com.konkon.onlinestore.product.search.service.application.rest.converter;
 
-import org.mapstruct.Mapper;
+import com.konkon.onlinestore.product.search.service.application.rest.model.ProductResponse;
+import com.konkon.onlinestore.product.search.service.domain.entity.Product;
 
-@Mapper(componentModel = "cdi")
 public interface ProductConverter {
-//    ProductResponse toResponse(Product product);
+    ProductResponse toResponse(Product domain);
 }

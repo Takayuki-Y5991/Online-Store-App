@@ -13,6 +13,8 @@ public interface ProductRepository {
 
     Uni<Product> searchProduct(UUID productId, SqlClient client);
 
+    Multi<Product> searchProductsWithCategoryId(Integer categoryId, String sortKey, String order, Integer limit, Integer offset);
+
     Multi<Product> searchProducts(String sortKey, String order, Integer limit, Integer offset);
 
     Uni<Product> createProduct(Product product, SqlClient client);

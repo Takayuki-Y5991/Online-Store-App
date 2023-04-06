@@ -53,6 +53,14 @@ class ProductRepositoryImplTest {
     }
 
     @Test
+    void Search_Products_With_Category_Id_Success() {
+        Multi<Product> result = repository.searchProductsWithCategoryId(1, null, null, 10, 0);
+
+        assertThat(result, notNullValue());
+        assertThat(result.collect().asList().await().indefinitely(), hasSize(1));
+    }
+
+    @Test
     void Create_Product_Success() {
         Category category = Category.builder()
                 .id(1)

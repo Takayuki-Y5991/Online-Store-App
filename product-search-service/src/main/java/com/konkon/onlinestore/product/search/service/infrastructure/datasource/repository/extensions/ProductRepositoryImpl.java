@@ -16,7 +16,6 @@ import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlClient;
 import io.vertx.mutiny.sqlclient.Tuple;
-import org.apache.commons.lang3.ObjectUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -53,7 +52,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .execute(Tuple.of(productId))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? toProduct(iterator.next()) : null)
-                .onItem().transform(entity -> ObjectUtils.isNotEmpty(entity) ? productTranslator.toDomain(entity) : null);
+                .onItem().ifNotNull().transform(productTranslator::toDomain);
     }
 
     @Override
@@ -66,11 +65,34 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .execute(selectTuple(sortKey, limit, offset))
                 .onItem().transformToMulti(rows -> Multi.createFrom().iterable(rows))
                 .onItem().transform(this::toProduct)
-                .onItem().transform(entity -> ObjectUtils.isNotEmpty(entity) ? productTranslator.toDomain(entity) : null);
+                .filter(Objects::nonNull)
+                .onItem().transform(productTranslator::toDomain);
     }
 
     private Tuple selectTuple(String key, Integer limit, Integer offset) {
         return Tuple.wrap(Arrays.asList(
+                Objects.isNull(key) ? " p.id" : key,
+                Objects.isNull(limit) ? 10 : limit,
+                Objects.isNull(offset) ? 0 : offset));
+    }
+
+    @Override
+    public Multi<Product> searchProductsWithCategoryId(Integer categoryId, String sortKey, String order, Integer limit, Integer offset) {
+
+        final String query = QueryHelper.setOrderInQuery(ProductCommand.FECTH_BY_CATEGORY_ID, order);
+
+        return client
+                .preparedQuery(query)
+                .execute(selectWithCategoryIdTuple(categoryId, sortKey, limit, offset))
+                .onItem().transformToMulti(rows -> Multi.createFrom().iterable(rows))
+                .onItem().transform(this::toProduct)
+                .filter(Objects::nonNull)
+                .onItem().transform(productTranslator::toDomain);
+    }
+
+    private Tuple selectWithCategoryIdTuple(Integer categoryId, String key, Integer limit, Integer offset) {
+        return Tuple.wrap(Arrays.asList(
+                categoryId,
                 Objects.isNull(key) ? " p.id" : key,
                 Objects.isNull(limit) ? 10 : limit,
                 Objects.isNull(offset) ? 0 : offset));

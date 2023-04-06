@@ -17,7 +17,6 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,8 +29,8 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private final int INIT_VERSION = 1;
 
-    private final String FETCH = "SELECT p.*, c.* FROM products p INNER JOIN categories c ON p.category_id = c.id　ORDER BY $1 $2 LIMIT $3 OFFSET $4";
-    private final String FETCH_BY_ID = "SELECT p.*, c.* FROM products p INNER JOIN categories c ON p.category_id = c.id WHERE p.id = $1";
+    private final String FECTH = "SELECT p.*, c.name as category_name FROM products p INNER JOIN categories c ON p.category_id = c.id ORDER BY $1 %s LIMIT $2 OFFSET $3";
+    private final String FETCH_BY_ID = "SELECT p.*, c.name as category_name FROM products p INNER JOIN categories c ON p.category_id = c.id WHERE p.id = $1";
     private final String INSERT = "INSERT INTO products VALUES ($1, $2, $3, $4, $5, $6, $7)";
     private final String DELETE = "DELETE FROM products WHERE id = $1";
     private final String UPDATE = "UPDATE products SET name = $1, price = $2, description = $3, image_url = $4, category_id = $5, version = version + 1 WHERE id = $6 AND version = $7";
@@ -63,21 +62,35 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Multi<Product> searchProducts(String sortKey, String order, int limit, int offset) {
+    public Multi<Product> searchProducts(String sortKey, String order, Integer limit, Integer offset) {
+
+        final String query = setOrderInQuery(FECTH, order);
+
         return client
-                .preparedQuery(FETCH)
-                .execute(selectTuple(sortKey, order, limit, offset))
+                .preparedQuery(query)
+                .execute(selectTuple(sortKey, limit, offset))
                 .onItem().transformToMulti(rows -> Multi.createFrom().iterable(rows))
-                .onItem().transform(row -> toProduct(row))
+                .onItem().transform(this::toProduct)
                 .onItem().transform(entity -> ObjectUtils.isNotEmpty(entity) ? productTranslator.toDomain(entity) : null);
     }
 
-    private Tuple selectTuple(String sortKey, String order, int limit, int offset) {
+    private Tuple selectTuple(String key, Integer limit, Integer offset) {
         return Tuple.wrap(Arrays.asList(
-                Objects.isNull(sortKey) ? "p.id" : sortKey,
-                Objects.isNull(order) ? "ASC" : order,
+                Objects.isNull(key) ? " p.id" : key,
                 Objects.isNull(limit) ? 10 : limit,
                 Objects.isNull(offset) ? 0 : offset));
+    }
+
+    /**
+     * PgPoolライブラリのプレースフォルダにORDERの関連句挿入ができなかったため、Orderの順序に関して定義する関数
+     *
+     * @param baseQuery 「%s」を含むQuery
+     * @param order     順序 [ASC or DESC]
+     * @return Query
+     */
+    private String setOrderInQuery(String baseQuery, String order) {
+        String finalOrder = Objects.isNull(order) ? "ASC" : order;
+        return String.format(baseQuery, finalOrder);
     }
 
     @Override
@@ -92,7 +105,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         return Tuple.wrap(Arrays.asList(
                 product.getId(),
                 product.getName(),
-                product.getPrice(),
+                product.getPrice().value(),
                 product.getDescription(),
                 product.getImageUrl(),
                 product.getCategory().getId(),
@@ -110,17 +123,16 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Uni<Product> updateProduct(Product product, SqlClient client) {
-        LocalDateTime newTimeStamp = LocalDateTime.now();
         return client
                 .preparedQuery(UPDATE)
-                .execute(updateTuple(product, newTimeStamp))
-                .onItem().transform(rows -> rows.rowCount() > 0 ? updateProduct(product, newTimeStamp) : null);
+                .execute(updateTuple(product))
+                .onItem().transform(rows -> rows.rowCount() > 0 ? updateProduct(product) : null);
     }
 
-    private Tuple updateTuple(Product product, LocalDateTime newTimeStamp) {
+    private Tuple updateTuple(Product product) {
         return Tuple.wrap(Arrays.asList(
                 product.getName(),
-                product.getPrice(),
+                product.getPrice().value(),
                 product.getDescription(),
                 product.getImageUrl(),
                 product.getCategory().getId(),
@@ -128,7 +140,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.getVersion()));
     }
 
-    private Product updateProduct(Product product, LocalDateTime newTimeStamp) {
+    private Product updateProduct(Product product) {
         return Product.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -146,18 +158,17 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private ProductEntity toProduct(Row row) {
         CategoryEntity category = CategoryEntity.builder()
-                .id(row.getInteger("c.id"))
-                .name(row.getString("c.name"))
+                .id(row.getInteger("category_id"))
+                .name(row.getString("category_name"))
                 .build();
-        ProductEntity entity = ProductEntity.builder()
-                .id(row.getUUID("p.id"))
-                .name(row.getString("p.name"))
-                .price(row.getBigDecimal("p.price"))
-                .description(row.getString("p.description"))
-                .imageUrl(row.getString("p.imageUrl"))
-                .version(row.getInteger("p.version"))
+        return ProductEntity.builder()
+                .id(row.getUUID("id"))
+                .name(row.getString("name"))
+                .price(row.getBigDecimal("price"))
+                .description(row.getString("description"))
+                .imageUrl(row.getString("image_url"))
+                .version(row.getInteger("version"))
                 .category(category)
                 .build();
-        return entity;
     }
 }

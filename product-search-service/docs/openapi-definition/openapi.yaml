@@ -1,0 +1,89 @@
+---
+openapi: 3.0.3
+info:
+  title: OpenAPI Definition Example
+  version: 0.0.1
+servers:
+- url: http://localhost:9001
+  description: Auto generated value
+- url: http://0.0.0.0:9001
+  description: Auto generated value
+paths:
+  /api/products:
+    get:
+      tags:
+      - Product Resource
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          format: int32
+          type: integer
+      - name: offset
+        in: query
+        schema:
+          format: int32
+          type: integer
+      - name: order
+        in: query
+        schema:
+          type: string
+      - name: sortKey
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponse'
+  /api/products/{productId}:
+    get:
+      tags:
+      - Product Resource
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+components:
+  schemas:
+    CategoryResponse:
+      type: object
+      properties:
+        categoryId:
+          format: int32
+          type: integer
+        categoryName:
+          type: string
+    ProductResponse:
+      type: object
+      properties:
+        productId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        price:
+          type: number
+        description:
+          type: string
+        imageUrl:
+          type: string
+        category:
+          $ref: '#/components/schemas/CategoryResponse'
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string

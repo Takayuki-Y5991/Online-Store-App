@@ -5,6 +5,9 @@ import com.konkon.onlinestore.product.search.service.domain.entity.Product;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.entity.CategoryEntity;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.entity.ProductEntity;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.ProductRepository;
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.extensions.command.ProductCommand;
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.extensions.helper.InsertHelper;
+import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.extensions.helper.QueryHelper;
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.traslator.ProductTranslator;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -27,14 +30,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final ProductTranslator productTranslator;
     private final PgPool client;
 
-    private final int INIT_VERSION = 1;
-
-    private final String FECTH = "SELECT p.*, c.name as category_name FROM products p INNER JOIN categories c ON p.category_id = c.id ORDER BY $1 %s LIMIT $2 OFFSET $3";
-    private final String FETCH_BY_ID = "SELECT p.*, c.name as category_name FROM products p INNER JOIN categories c ON p.category_id = c.id WHERE p.id = $1";
-    private final String INSERT = "INSERT INTO products VALUES ($1, $2, $3, $4, $5, $6, $7)";
-    private final String DELETE = "DELETE FROM products WHERE id = $1";
-    private final String UPDATE = "UPDATE products SET name = $1, price = $2, description = $3, image_url = $4, category_id = $5, version = version + 1 WHERE id = $6 AND version = $7";
-
     @Inject
     public ProductRepositoryImpl(ProductTranslator productTranslator, PgPool client) {
         this.productTranslator = productTranslator;
@@ -54,7 +49,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private Uni<Product> executeFetchById(UUID productId, SqlClient client) {
         return client
-                .preparedQuery(FETCH_BY_ID)
+                .preparedQuery(ProductCommand.FETCH_BY_ID)
                 .execute(Tuple.of(productId))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? toProduct(iterator.next()) : null)
@@ -64,7 +59,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Multi<Product> searchProducts(String sortKey, String order, Integer limit, Integer offset) {
 
-        final String query = setOrderInQuery(FECTH, order);
+        final String query = QueryHelper.setOrderInQuery(ProductCommand.FECTH, order);
 
         return client
                 .preparedQuery(query)
@@ -81,22 +76,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                 Objects.isNull(offset) ? 0 : offset));
     }
 
-    /**
-     * PgPoolライブラリのプレースフォルダにORDERの関連句挿入ができなかったため、Orderの順序に関して定義する関数
-     *
-     * @param baseQuery 「%s」を含むQuery
-     * @param order     順序 [ASC or DESC]
-     * @return Query
-     */
-    private String setOrderInQuery(String baseQuery, String order) {
-        String finalOrder = Objects.isNull(order) ? "ASC" : order;
-        return String.format(baseQuery, finalOrder);
-    }
-
     @Override
     public Uni<Product> createProduct(Product product, SqlClient client) {
         return client
-                .preparedQuery(INSERT)
+                .preparedQuery(ProductCommand.INSERT)
                 .execute(insertTuple(product))
                 .onItem().transform(rows -> rows.rowCount() > 0 ? product : null);
     }
@@ -109,14 +92,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.getDescription(),
                 product.getImageUrl(),
                 product.getCategory().getId(),
-                INIT_VERSION
+                InsertHelper.INIT_VERSION
         ));
     }
 
     @Override
     public Uni<Boolean> deleteProduct(UUID productId, SqlClient client) {
         return client
-                .preparedQuery(DELETE)
+                .preparedQuery(ProductCommand.DELETE)
                 .execute(Tuple.of(productId))
                 .onItem().transform(rows -> rows.rowCount() == 1);
     }
@@ -124,7 +107,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Uni<Product> updateProduct(Product product, SqlClient client) {
         return client
-                .preparedQuery(UPDATE)
+                .preparedQuery(ProductCommand.UPDATE)
                 .execute(updateTuple(product))
                 .onItem().transform(rows -> rows.rowCount() > 0 ? updateProduct(product) : null);
     }

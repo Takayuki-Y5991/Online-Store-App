@@ -21,15 +21,15 @@ public class ProductTranslatorImpl implements ProductTranslator {
 
     @Override
     public Product toDomain(ProductEntity entity) {
-        return Product.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .price(new Price(entity.getPrice()))
-                .description(entity.getDescription())
-                .imageUrl(entity.getImageUrl())
-                .version(entity.getVersion())
-                .category(categoryTranslator.toDomain(entity.getCategory()))
-                .build();
+        return Product.build(
+                entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                new Price(entity.getPrice()),
+                entity.getImageUrl(),
+                entity.getVersion(),
+                categoryTranslator.toDomain(entity.getCategory())
+        );
     }
 
     @Override

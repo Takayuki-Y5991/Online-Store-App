@@ -53,20 +53,24 @@ class ProductRepositoryImplTest {
     }
 
     @Test
-    void Create_Product_Success() {
-        Category category = Category.builder()
-                .id(1)
-                .name("本")
-                .build();
+    void Search_Products_With_Category_Id_Success() {
+        Multi<Product> result = repository.searchProductsWithCategoryId(1, null, null, 10, 0);
 
-        Product newProduct = Product.builder()
-                .id(UUID.randomUUID())
-                .name("テスト本")
-                .price(new Price(BigDecimal.valueOf(500)))
-                .description("テスト本の説明")
-                .imageUrl("https://example.com/testbook.jpg")
-                .category(category)
-                .build();
+        assertThat(result, notNullValue());
+        assertThat(result.collect().asList().await().indefinitely(), hasSize(1));
+    }
+
+    @Test
+    void Create_Product_Success() {
+        Category category = Category.createBuild(1);
+
+        Product newProduct = Product.createBuild(
+                "テスト本",
+                "テスト本の説明",
+                new Price(BigDecimal.valueOf(500)),
+                "https://example.com/testbook.jpg",
+                category
+        );
 
         Uni<Product> result = repository.createProduct(newProduct, client);
         assertThat(result, notNullValue());
@@ -76,20 +80,15 @@ class ProductRepositoryImplTest {
     @Test
     void Update_Product_Success() {
         UUID productId = UUID.fromString("d9e4c6de-4e3f-4a57-8aaf-06e54c6c45e1");
-        Category category = Category.builder()
-                .id(1)
-                .name("本")
-                .build();
-
-        Product updatedProduct = Product.builder()
-                .id(productId)
-                .name("更新された本")
-                .price(new Price(BigDecimal.valueOf(1000)))
-                .description("更新された説明")
-                .imageUrl("https://example.com/updatedbook.jpg")
-                .category(category)
-                .version(1)
-                .build();
+        Category category = Category.createBuild(1);
+        Product updatedProduct = Product.build(
+                productId,
+                "更新された本",
+                "更新された説明",
+                new Price(BigDecimal.valueOf(1000)),
+                "https://example.com/updatedbook.jpg",
+                1,
+                category);
 
         Uni<Product> result = repository.updateProduct(updatedProduct, client);
         assertThat(result, notNullValue());

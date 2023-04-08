@@ -12,6 +12,5 @@ public interface CategoryRepository {
     Multi<Category> searchCategories();
 
     Uni<Boolean> createCategory(Category category, SqlClient client);
-
-    Uni<Boolean> deleteCategory(int categoryId, SqlClient client);
+    
 }

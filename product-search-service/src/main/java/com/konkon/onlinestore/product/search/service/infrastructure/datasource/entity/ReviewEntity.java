@@ -18,7 +18,7 @@ import java.util.UUID;
 public class ReviewEntity {
     private UUID id;
     private UUID productId;
-    private UUID accountId;
+    private String accountId;
     private Integer rating;
     private String title;
     private String comment;

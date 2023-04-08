@@ -32,20 +32,15 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Change to product-search-service directory
-        run: cd product-search-service
-
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
-
       - name: Execute Gradle build
-        run: ./gradlew build
+        working-directory: product-search-service
+        run: ./gradlew build --no-daemon
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v1
         if: always()
         with:
           name: test results
-          path: build/test-results/test
+          path: product-search-service/build/test-results/test
 
 

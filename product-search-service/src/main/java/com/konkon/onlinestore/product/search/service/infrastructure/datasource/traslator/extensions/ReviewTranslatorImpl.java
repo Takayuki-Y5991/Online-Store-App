@@ -9,19 +9,19 @@ import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class ReviewTranslatorImpl implements ReviewTranslator {
-    
+
     @Override
     public Review toDomain(ReviewEntity entity) {
-        return Review.builder()
-                .id(entity.getId())
-                .productId(entity.getProductId())
-                .accountId(entity.getAccountId())
-                .rating(new ReviewRate(entity.getRating()))
-                .title(entity.getTitle())
-                .comment(entity.getComment())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .build();
+        return Review.build(
+                entity.getId(),
+                entity.getProductId(),
+                entity.getAccountId(),
+                new ReviewRate(entity.getRating()),
+                entity.getTitle(),
+                entity.getComment(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt()
+        );
     }
 
     @Override

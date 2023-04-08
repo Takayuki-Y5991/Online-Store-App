@@ -22,4 +22,5 @@ public interface ProductRepository {
     Uni<Boolean> deleteProduct(UUID productId, SqlClient client);
 
     Uni<Product> updateProduct(Product product, SqlClient client);
+
 }

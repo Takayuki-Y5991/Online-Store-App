@@ -1,14 +1,3 @@
--- user-authenticate
-CREATE TABLE accounts (
-    uid VARCHAR(255) PRIMARY KEY,
-    account_name VARCHAR(255) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP
-);
-
 -- product-search-service
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
@@ -29,7 +18,7 @@ CREATE TABLE products (
 CREATE TABLE reviews (
     id UUID PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-    account_uid VARCHAR(255) NOT NULL REFERENCES accounts(uid) ON DELETE CASCADE,
+    account_uid VARCHAR(255) NOT NULL,
     rating INTEGER NOT NULL,
     title VARCHAR(20) NOT NULL,
     comment TEXT NOT NULL,

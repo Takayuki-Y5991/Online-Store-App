@@ -51,6 +51,6 @@ class CategoryRepositoryImplTest {
         Category category = Category.build(4, "テスト項目");
         Uni<Boolean> actual = repository.createCategory(category, client);
         assertThat(actual, notNullValue());
-        assertThat(actual.await().indefinitely().booleanValue(), is(true));
+        assertThat(actual.await().indefinitely(), is(true));
     }
 }

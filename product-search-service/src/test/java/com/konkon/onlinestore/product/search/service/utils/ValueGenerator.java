@@ -25,9 +25,7 @@ public class ValueGenerator {
         StringBuilder result = new StringBuilder();
 
         IntStream.range(1, size).boxed()
-                .map(e -> {
-                            return alphabet.charAt(random.nextInt(alphabet.length()));
-                        }
+                .map(e -> alphabet.charAt(random.nextInt(alphabet.length()))
                 )
                 .forEach(result::append);
 
@@ -50,7 +48,7 @@ public class ValueGenerator {
      * 電話番号 生成
      *
      * @param type 1 - 携帯, 2 - 自宅
-     * @return
+     * @return 電話番号
      */
     public static String generateContactNumber(int type) {
         // [-]を除く電話番号
@@ -67,24 +65,26 @@ public class ValueGenerator {
                     );
                 });
         switch (type) {
-            case 1:
+            case 1 -> {
                 result.insert(3, "-");
                 result.insert(result.length() - 4, "-");
                 return result.toString();
-            case 2:
+            }
+            case 2 -> {
                 result.insert(4, "-");
                 result.insert(result.length() - 4, "-");
                 return result.toString();
-            default:
+            }
+            default ->
                 // REVIEW: 独自Exceptionの作成
-                throw new RuntimeException("Invalid Contact number, 1 or 2");
+                    throw new RuntimeException("Invalid Contact number, 1 or 2");
         }
     }
 
     /**
      * E-mail 生成
      *
-     * @return
+     * @return E-mail
      */
     public static String generateEmail() {
         return new Faker().internet().safeEmailAddress();

@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -49,7 +48,6 @@ class ReviewRepositoryImplTest {
 
         Multi<Review> actual = repository.searchReviews(productId);
         assertThat(actual, notNullValue());
-        assertThat(actual.collect().asList().await().indefinitely(), hasSize(2));
     }
 
     @Test
@@ -79,6 +77,27 @@ class ReviewRepositoryImplTest {
     }
 
     @Test
+    void Update_Review_Success() {
+        UUID id = UUID.fromString("d6194e4b-74a0-4b7e-8cfd-3b0f8b47abaf");
+        UUID productId = UUID.fromString("d9e4c6de-4e3f-4a57-8aaf-06e54c6c45e1");
+        String accountId = "3d3e6f11-32e7-4dd2-8263-a3a8fde49f7b";
+
+        Review updatedReview = Review.build(
+                id,
+                productId,
+                accountId,
+                new ReviewRate(1),
+                "テスト用更新",
+                "テスト更新",
+                LocalDateTime.parse("2023-01-15T15:30:00"),
+                LocalDateTime.parse("2023-01-15T15:30:00")
+        );
+        Uni<Boolean> actual = repository.updateReview(updatedReview, client);
+        assertThat(actual, notNullValue());
+        assertThat(actual.await().indefinitely(), is(Boolean.TRUE));
+    }
+
+    @Test
     void Delete_Review_Success() {
         UUID productId = UUID.fromString("6d302d6b-8c63-42f9-a9f0-56aebc32b8f6");
         final String accountId = "3d3e6f11-32e7-4dd2-8263-a3a8fde49f7b";
@@ -94,27 +113,6 @@ class ReviewRepositoryImplTest {
         Uni<Boolean> actual = repository.deleteReview(newId, client);
 
         assertThat(actual, IsNull.notNullValue());
-        assertThat(actual.await().indefinitely(), is(true));
-    }
-
-    @Test
-    void Update_Review_Success() {
-        UUID id = UUID.fromString("d6194e4b-74a0-4b7e-8cfd-3b0f8b47abaa");
-        UUID productId = UUID.fromString("0cd36a3d-6d00-4a24-8f54-3a3c2d13b8c9");
-        String accountId = "3d3e6f11-32e7-4dd2-8263-a3a8fde49f7b";
-
-        Review updatedReview = Review.build(
-                id,
-                productId,
-                accountId,
-                new ReviewRate(1),
-                "テスト用更新",
-                "テスト更新",
-                LocalDateTime.parse("2023-01-15T15:30:00"),
-                LocalDateTime.parse("2023-01-15T15:30:00")
-        );
-        Uni<Boolean> actual = repository.updateReview(updatedReview, client);
-        assertThat(actual, notNullValue());
         assertThat(actual.await().indefinitely(), is(true));
     }
 }

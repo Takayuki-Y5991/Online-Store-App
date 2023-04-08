@@ -1,8 +1,10 @@
 package com.konkon.onlinestore.product.search.service.application.rest.resource;
 
 import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductConverter;
+import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductReviewConverter;
 import com.konkon.onlinestore.product.search.service.application.rest.model.CreateProductRequest;
 import com.konkon.onlinestore.product.search.service.application.rest.model.ProductResponse;
+import com.konkon.onlinestore.product.search.service.application.rest.model.ProductReviewResponse;
 import com.konkon.onlinestore.product.search.service.application.rest.model.UpdateProductRequest;
 import com.konkon.onlinestore.product.search.service.domain.usecase.ProductUseCase;
 import com.konkon.onlinestore.product.search.service.utils.annotation.OrderConstraint;
@@ -35,19 +37,21 @@ public class ProductResource {
 
     private final ProductUseCase productUseCase;
     private final ProductConverter productConverter;
+    private final ProductReviewConverter productReviewConverter;
 
     @Inject
-    public ProductResource(ProductUseCase productUseCase, ProductConverter productConverter) {
+    public ProductResource(ProductUseCase productUseCase, ProductConverter productConverter, ProductReviewConverter productReviewConverter) {
         this.productUseCase = productUseCase;
         this.productConverter = productConverter;
+        this.productReviewConverter = productReviewConverter;
     }
 
     @GET
     @Path("{productId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<ProductResponse> searchProduct(@PathParam("productId") @UUIDConstraint String productId) {
+    public Uni<ProductReviewResponse> searchProduct(@PathParam("productId") @UUIDConstraint String productId) {
         return productUseCase.searchProduct(UUID.fromString(productId))
-                .onItem().transform(productConverter::toResponse);
+                .onItem().transform(productReviewConverter::toResponse);
     }
 
     @GET
@@ -85,5 +89,4 @@ public class ProductResource {
     public Uni<Boolean> deleteProduct(@PathParam("productId") @UUIDConstraint String productId) {
         return productUseCase.deleteProduct(UUID.fromString(productId));
     }
-
 }

@@ -23,4 +23,11 @@ public class Category {
                 .name("CREATE")
                 .build();
     }
+
+    public static Category createBuild(String name) {
+        return Category.builder()
+                .id(0)
+                .name(name)
+                .build();
+    }
 }

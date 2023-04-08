@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class PostgresResource implements QuarkusTestResourceLifecycleManager {
 
-    static DockerImageName postgresImage = DockerImageName.parse("postgres:15-alpine").asCompatibleSubstituteFor("postgres");
-    static PostgreSQLContainer<?> db = new PostgreSQLContainer<>(postgresImage)
+    static final DockerImageName postgresImage = DockerImageName.parse("postgres:15-alpine").asCompatibleSubstituteFor("postgres");
+    static final PostgreSQLContainer<?> db = new PostgreSQLContainer<>(postgresImage)
             .withDatabaseName("online-store")
             .withUsername("app")
             .withPassword("password")

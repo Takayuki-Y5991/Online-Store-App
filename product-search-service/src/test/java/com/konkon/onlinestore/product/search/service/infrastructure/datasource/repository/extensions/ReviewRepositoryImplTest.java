@@ -94,7 +94,7 @@ class ReviewRepositoryImplTest {
         );
         Uni<Boolean> actual = repository.updateReview(updatedReview, client);
         assertThat(actual, notNullValue());
-        assertThat(actual.await().indefinitely().booleanValue(), is(Boolean.TRUE));
+        assertThat(actual.await().indefinitely(), is(Boolean.TRUE));
     }
 
     @Test

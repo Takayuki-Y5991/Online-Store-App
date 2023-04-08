@@ -7,7 +7,7 @@ public record ReviewRate(Integer value) {
         if (Objects.isNull(value)) {
             throw new IllegalArgumentException("Review rate must be No Item");
         }
-        if (value < 1 && 5 < value) {
+        if (value < 1 & 5 < value) {
             throw new IllegalArgumentException("Please rate your review on a scale of 1-5.");
         }
     }

@@ -5,6 +5,7 @@ import com.konkon.onlinestore.product.search.service.domain.usecase.ProductUseCa
 import com.konkon.onlinestore.product.search.service.infrastructure.datasource.repository.ProductRepository;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.pgclient.PgPool;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -15,10 +16,12 @@ import java.util.UUID;
 public class ProductUseCaseImpl implements ProductUseCase {
 
     private final ProductRepository productRepository;
+    private final PgPool client;
 
     @Inject
-    public ProductUseCaseImpl(ProductRepository productRepository) {
+    public ProductUseCaseImpl(ProductRepository productRepository, PgPool client) {
         this.productRepository = productRepository;
+        this.client = client;
     }
 
     @Override
@@ -30,5 +33,24 @@ public class ProductUseCaseImpl implements ProductUseCase {
     @Override
     public Multi<Product> searchProducts(String key, String order, Integer limit, Integer offset) {
         return productRepository.searchProducts(key, order, limit, offset);
+    }
+
+    @Override
+    public Uni<Product> createProduct(Product product) {
+        return client.withTransaction(conn ->
+                productRepository.createProduct(product, conn)
+        );
+    }
+
+    @Override
+    public Uni<Product> updateProduct(Product product) {
+        return client.withTransaction(conn ->
+                productRepository.updateProduct(product, conn));
+    }
+
+    @Override
+    public Uni<Boolean> deleteProduct(UUID productId) {
+        return client.withTransaction(conn ->
+                productRepository.deleteProduct(productId, conn));
     }
 }

@@ -48,10 +48,7 @@ class CategoryRepositoryImplTest {
 
     @Test
     void Create_Category_Success() {
-        Category category = Category.builder()
-                .id(4)
-                .name("テスト項目")
-                .build();
+        Category category = Category.build(4, "テスト項目");
         Uni<Boolean> actual = repository.createCategory(category, client);
         assertThat(actual, notNullValue());
         assertThat(actual.await().indefinitely().booleanValue(), is(true));

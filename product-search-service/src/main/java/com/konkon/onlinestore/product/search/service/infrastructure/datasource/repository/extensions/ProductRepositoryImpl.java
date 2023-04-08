@@ -146,20 +146,16 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     private Product updateProduct(Product product) {
-        return Product.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .description(product.getDescription())
-                .imageUrl(product.getImageUrl())
-                .category(Category.builder()
-                        .id(product.getCategory().getId())
-                        .name(product.getCategory().getName())
-                        .build())
-                .version(product.getVersion() + 1)
-                .build();
+        return Product.build(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getImageUrl(),
+                product.getVersion() + 1,
+                Category.build(product.getCategory().getId(), product.getCategory().getName())
+        );
     }
-
 
     private ProductEntity toProduct(Row row) {
         CategoryEntity category = CategoryEntity.builder()

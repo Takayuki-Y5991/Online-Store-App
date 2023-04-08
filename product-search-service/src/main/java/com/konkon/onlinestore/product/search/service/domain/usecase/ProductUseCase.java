@@ -10,4 +10,10 @@ public interface ProductUseCase {
     Uni<Product> searchProduct(UUID productId);
 
     Multi<Product> searchProducts(String key, String order, Integer limit, Integer offset);
+
+    Uni<Product> createProduct(Product product);
+
+    Uni<Product> updateProduct(Product product);
+
+    Uni<Boolean> deleteProduct(UUID productId);
 }

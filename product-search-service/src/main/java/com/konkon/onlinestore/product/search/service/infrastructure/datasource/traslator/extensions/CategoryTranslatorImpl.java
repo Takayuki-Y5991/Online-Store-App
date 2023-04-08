@@ -10,10 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 public class CategoryTranslatorImpl implements CategoryTranslator {
     @Override
     public Category toDomain(CategoryEntity entity) {
-        return Category.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .build();
+        return Category.build(entity.getId(), entity.getName());
     }
 
     @Override

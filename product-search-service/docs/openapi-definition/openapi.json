@@ -20,6 +20,8 @@
           "in" : "query",
           "schema" : {
             "format" : "int32",
+            "default" : "10",
+            "maximum" : 100,
             "type" : "integer"
           }
         }, {
@@ -27,18 +29,22 @@
           "in" : "query",
           "schema" : {
             "format" : "int32",
+            "default" : "0",
+            "minimum" : 0,
             "type" : "integer"
           }
         }, {
           "name" : "order",
           "in" : "query",
           "schema" : {
+            "default" : "ASC",
             "type" : "string"
           }
         }, {
           "name" : "sortKey",
           "in" : "query",
           "schema" : {
+            "default" : "p.id",
             "type" : "string"
           }
         } ],
@@ -52,6 +58,30 @@
                   "items" : {
                     "$ref" : "#/components/schemas/ProductResponse"
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Product Resource" ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateProductRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProductResponse"
                 }
               }
             }
@@ -82,6 +112,61 @@
             }
           }
         }
+      },
+      "put" : {
+        "tags" : [ "Product Resource" ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateProductRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Product Resource" ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -96,6 +181,34 @@
           },
           "categoryName" : {
             "type" : "string"
+          }
+        }
+      },
+      "CreateProductRequest" : {
+        "required" : [ "name", "description" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "maxLength" : 100,
+            "type" : "string"
+          },
+          "price" : {
+            "maximum" : 0,
+            "exclusiveMaximum" : true,
+            "type" : "number"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "imageUrl" : {
+            "maxLength" : 255,
+            "type" : "string"
+          },
+          "categoryId" : {
+            "format" : "int32",
+            "maximum" : 0,
+            "exclusiveMaximum" : true,
+            "type" : "integer"
           }
         }
       },
@@ -117,6 +230,10 @@
           "imageUrl" : {
             "type" : "string"
           },
+          "version" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
           "category" : {
             "$ref" : "#/components/schemas/CategoryResponse"
           }
@@ -126,6 +243,31 @@
         "format" : "uuid",
         "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
         "type" : "string"
+      },
+      "UpdateProductRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "imageUrl" : {
+            "type" : "string"
+          },
+          "version" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }
       }
     }
   }

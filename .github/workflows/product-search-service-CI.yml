@@ -35,11 +35,11 @@ jobs:
       - name: Change to product-search-service directory
         run: cd product-search-service
 
-      #      - name: Set up Gradle
-      #        uses: gradle/gradle-build-action@v2
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Execute Gradle build
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v1

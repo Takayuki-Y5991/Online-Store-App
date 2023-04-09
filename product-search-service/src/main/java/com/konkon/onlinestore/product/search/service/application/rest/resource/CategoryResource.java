@@ -3,8 +3,8 @@ package com.konkon.onlinestore.product.search.service.application.rest.resource;
 
 import com.konkon.onlinestore.product.search.service.application.rest.converter.CategoryConverter;
 import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductConverter;
-import com.konkon.onlinestore.product.search.service.application.rest.model.CategoryResponse;
-import com.konkon.onlinestore.product.search.service.application.rest.model.ProductResponse;
+import com.konkon.onlinestore.product.search.service.application.rest.model.response.CategoryResponse;
+import com.konkon.onlinestore.product.search.service.application.rest.model.response.ProductResponse;
 import com.konkon.onlinestore.product.search.service.domain.entity.Category;
 import com.konkon.onlinestore.product.search.service.domain.usecase.CategoryUseCase;
 import com.konkon.onlinestore.product.search.service.domain.usecase.ProductUseCase;

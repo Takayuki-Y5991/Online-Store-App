@@ -67,8 +67,7 @@ class ReviewRepositoryImplTest {
                 accountId,
                 new ReviewRate(3),
                 "最高の食品",
-                "良い商品でした。",
-                LocalDateTime.now()
+                "良い商品でした。"
         );
 
         Uni<Review> actual = repository.createReview(review, client);
@@ -106,8 +105,7 @@ class ReviewRepositoryImplTest {
                 accountId,
                 new ReviewRate(1),
                 "最高の食品",
-                "良い商品でした。",
-                LocalDateTime.now()
+                "良い商品でした。"
         );
         UUID newId = repository.createReview(review, client).await().indefinitely().getId();
         Uni<Boolean> actual = repository.deleteReview(newId, client);

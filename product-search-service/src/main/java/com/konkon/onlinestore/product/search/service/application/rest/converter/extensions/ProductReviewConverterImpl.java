@@ -3,7 +3,7 @@ package com.konkon.onlinestore.product.search.service.application.rest.converter
 import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductConverter;
 import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductReviewConverter;
 import com.konkon.onlinestore.product.search.service.application.rest.converter.ReviewConverter;
-import com.konkon.onlinestore.product.search.service.application.rest.model.ProductReviewResponse;
+import com.konkon.onlinestore.product.search.service.application.rest.model.response.ProductReviewResponse;
 import com.konkon.onlinestore.product.search.service.domain.entity.aggregation.ProductReview;
 
 import javax.enterprise.context.ApplicationScoped;

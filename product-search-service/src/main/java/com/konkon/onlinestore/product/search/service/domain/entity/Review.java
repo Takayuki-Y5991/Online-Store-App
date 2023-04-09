@@ -47,8 +47,7 @@ public class Review {
             String accountId,
             ReviewRate rating,
             String title,
-            String comment,
-            LocalDateTime createdAt
+            String comment
     ) {
         return Review.builder()
                 .id(UUID.randomUUID())
@@ -57,7 +56,7 @@ public class Review {
                 .rating(rating)
                 .title(title)
                 .comment(comment)
-                .createdAt(createdAt)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 

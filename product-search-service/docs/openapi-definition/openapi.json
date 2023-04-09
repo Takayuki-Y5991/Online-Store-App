@@ -12,6 +12,111 @@
     "description" : "Auto generated value"
   } ],
   "paths" : {
+    "/api/categories" : {
+      "get" : {
+        "tags" : [ "Category Resource" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CategoryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Category Resource" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\S",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories/{categoryId}" : {
+      "get" : {
+        "tags" : [ "Category Resource" ],
+        "parameters" : [ {
+          "name" : "categoryId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "schema" : {
+            "format" : "int32",
+            "default" : "10",
+            "maximum" : 100,
+            "type" : "integer"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "schema" : {
+            "format" : "int32",
+            "default" : "0",
+            "minimum" : 0,
+            "type" : "integer"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "schema" : {
+            "default" : "ASC",
+            "type" : "string"
+          }
+        }, {
+          "name" : "sortKey",
+          "in" : "query",
+          "schema" : {
+            "default" : "p.id",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ProductResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/products" : {
       "get" : {
         "tags" : [ "Product Resource" ],
@@ -106,7 +211,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ProductResponse"
+                  "$ref" : "#/components/schemas/ProductReviewResponse"
                 }
               }
             }
@@ -149,6 +254,89 @@
         "tags" : [ "Product Resource" ],
         "parameters" : [ {
           "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews" : {
+      "post" : {
+        "tags" : [ "Review Resource" ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateReviewRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReviewResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews/{reviewId}" : {
+      "put" : {
+        "tags" : [ "Review Resource" ],
+        "parameters" : [ {
+          "name" : "reviewId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateReviewRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Review Resource" ],
+        "parameters" : [ {
+          "name" : "reviewId",
           "in" : "path",
           "required" : true,
           "schema" : {
@@ -212,6 +400,35 @@
           }
         }
       },
+      "CreateReviewRequest" : {
+        "required" : [ "productId", "accountId", "rating", "title", "comment" ],
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "$ref" : "#/components/schemas/UUID"
+          },
+          "accountId" : {
+            "type" : "string"
+          },
+          "rating" : {
+            "format" : "int32",
+            "maximum" : 5,
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "comment" : {
+            "type" : "string"
+          }
+        }
+      },
+      "LocalDateTime" : {
+        "format" : "date-time",
+        "type" : "string",
+        "example" : "2022-03-10T12:15:50"
+      },
       "ProductResponse" : {
         "type" : "object",
         "properties" : {
@@ -239,33 +456,116 @@
           }
         }
       },
+      "ProductReviewResponse" : {
+        "type" : "object",
+        "properties" : {
+          "product" : {
+            "$ref" : "#/components/schemas/ProductResponse"
+          },
+          "reviews" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ReviewResponse"
+            }
+          }
+        }
+      },
+      "ReviewResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/UUID"
+          },
+          "productId" : {
+            "$ref" : "#/components/schemas/UUID"
+          },
+          "accountId" : {
+            "type" : "string"
+          },
+          "rating" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "comment" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updatedAt" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
       "UUID" : {
         "format" : "uuid",
         "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
         "type" : "string"
       },
       "UpdateProductRequest" : {
+        "required" : [ "name", "description", "version", "categoryId" ],
         "type" : "object",
         "properties" : {
           "name" : {
+            "maxLength" : 100,
             "type" : "string"
           },
           "price" : {
+            "maximum" : 0,
+            "exclusiveMaximum" : true,
             "type" : "number"
           },
           "description" : {
             "type" : "string"
           },
           "imageUrl" : {
+            "maxLength" : 255,
             "type" : "string"
           },
           "version" : {
             "format" : "int32",
+            "maximum" : 0,
+            "exclusiveMaximum" : true,
             "type" : "integer"
           },
           "categoryId" : {
             "format" : "int32",
+            "maximum" : 0,
+            "exclusiveMaximum" : true,
             "type" : "integer"
+          }
+        }
+      },
+      "UpdateReviewRequest" : {
+        "required" : [ "productId", "accountId", "rating", "title", "comment", "createdAt", "updatedAt" ],
+        "type" : "object",
+        "properties" : {
+          "productId" : {
+            "$ref" : "#/components/schemas/UUID"
+          },
+          "accountId" : {
+            "type" : "string"
+          },
+          "rating" : {
+            "format" : "int32",
+            "maximum" : 5,
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "comment" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updatedAt" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
           }
         }
       }

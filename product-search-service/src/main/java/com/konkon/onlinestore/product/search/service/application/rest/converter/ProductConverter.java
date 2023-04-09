@@ -1,8 +1,8 @@
 package com.konkon.onlinestore.product.search.service.application.rest.converter;
 
-import com.konkon.onlinestore.product.search.service.application.rest.model.CreateProductRequest;
-import com.konkon.onlinestore.product.search.service.application.rest.model.ProductResponse;
-import com.konkon.onlinestore.product.search.service.application.rest.model.UpdateProductRequest;
+import com.konkon.onlinestore.product.search.service.application.rest.model.request.CreateProductRequest;
+import com.konkon.onlinestore.product.search.service.application.rest.model.request.UpdateProductRequest;
+import com.konkon.onlinestore.product.search.service.application.rest.model.response.ProductResponse;
 import com.konkon.onlinestore.product.search.service.domain.entity.Product;
 
 import java.util.UUID;

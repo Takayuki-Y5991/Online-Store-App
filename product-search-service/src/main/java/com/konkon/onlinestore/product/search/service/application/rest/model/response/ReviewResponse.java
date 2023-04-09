@@ -1,4 +1,4 @@
-package com.konkon.onlinestore.product.search.service.application.rest.model;
+package com.konkon.onlinestore.product.search.service.application.rest.model.response;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

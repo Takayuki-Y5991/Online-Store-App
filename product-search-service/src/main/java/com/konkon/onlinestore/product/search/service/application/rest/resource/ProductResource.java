@@ -2,10 +2,10 @@ package com.konkon.onlinestore.product.search.service.application.rest.resource;
 
 import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductConverter;
 import com.konkon.onlinestore.product.search.service.application.rest.converter.ProductReviewConverter;
-import com.konkon.onlinestore.product.search.service.application.rest.model.CreateProductRequest;
-import com.konkon.onlinestore.product.search.service.application.rest.model.ProductResponse;
-import com.konkon.onlinestore.product.search.service.application.rest.model.ProductReviewResponse;
-import com.konkon.onlinestore.product.search.service.application.rest.model.UpdateProductRequest;
+import com.konkon.onlinestore.product.search.service.application.rest.model.request.CreateProductRequest;
+import com.konkon.onlinestore.product.search.service.application.rest.model.request.UpdateProductRequest;
+import com.konkon.onlinestore.product.search.service.application.rest.model.response.ProductResponse;
+import com.konkon.onlinestore.product.search.service.application.rest.model.response.ProductReviewResponse;
 import com.konkon.onlinestore.product.search.service.domain.usecase.ProductUseCase;
 import com.konkon.onlinestore.product.search.service.utils.annotation.OrderConstraint;
 import com.konkon.onlinestore.product.search.service.utils.annotation.ProductSortKeyConstraint;

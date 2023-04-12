@@ -22,7 +22,7 @@ class ReviewResourceTest {
 
     @Test
     void Create_Review_Success() {
-        UUID productId = UUID.fromString("6d302d6b-8c63-42f9-a9f0-56aebc32b8f6");
+        UUID productId = UUID.fromString("d9e4c6de-4e3f-4a57-8aaf-06e54c6c45e1");
         String accountId = "3d3e6f11-32e7-4dd2-8263-a3a8fde49f7b";
         var review = new CreateReviewRequest(
                 productId,
@@ -38,6 +38,7 @@ class ReviewResourceTest {
                 .when()
                 .post("/reviews")
                 .then()
+                .log().all()
                 .statusCode(201)
                 .body("id", notNullValue());
     }

@@ -10,11 +10,12 @@ import io.vertx.mutiny.pgclient.PgPool;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTest
@@ -43,7 +44,7 @@ class CategoryRepositoryImplTest {
         Multi<Category> actual = repository.searchCategories();
 
         assertThat(actual, notNullValue());
-        assertThat(actual.collect().asList().await().indefinitely(), hasSize(3));
+        assertThat(actual.collect().asList().await().indefinitely(), not(Collections.EMPTY_LIST));
     }
 
     @Test

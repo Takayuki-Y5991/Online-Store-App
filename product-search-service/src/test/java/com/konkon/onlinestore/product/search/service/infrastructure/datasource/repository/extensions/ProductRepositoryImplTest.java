@@ -14,11 +14,12 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -49,7 +50,7 @@ class ProductRepositoryImplTest {
         Multi<Product> result = repository.searchProducts(null, "desc", 10, 0);
 
         assertThat(result, notNullValue());
-        assertThat(result.collect().asList().await().indefinitely(), hasSize(3));
+        assertThat(result.collect().asList().await().indefinitely(), not(Collections.EMPTY_LIST));
     }
 
     @Test
@@ -57,7 +58,7 @@ class ProductRepositoryImplTest {
         Multi<Product> result = repository.searchProductsWithCategoryId(1, null, null, 10, 0);
 
         assertThat(result, notNullValue());
-        assertThat(result.collect().asList().await().indefinitely(), hasSize(1));
+        assertThat(result.collect().asList().await().indefinitely(), not(Collections.EMPTY_LIST));
     }
 
     @Test

@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Negative;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -59,7 +58,7 @@ public class ProductResource {
     public Multi<ProductResponse> searchProducts(
             @DefaultValue(value = "p.id") @QueryParam("sortKey") @ProductSortKeyConstraint String key,
             @DefaultValue(value = "ASC") @QueryParam("order") @OrderConstraint String order,
-            @DefaultValue(value = "10") @QueryParam("limit") @Negative @Max(100) Integer limit,
+            @DefaultValue(value = "10") @QueryParam("limit") @Min(1) @Max(100) Integer limit,
             @DefaultValue(value = "0") @QueryParam("offset") @Min(0) Integer offset) {
         return productUseCase.searchProducts(key, order, limit, offset)
                 .onItem().transform(productConverter::toResponse);

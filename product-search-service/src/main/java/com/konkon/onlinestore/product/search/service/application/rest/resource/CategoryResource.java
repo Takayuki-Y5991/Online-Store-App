@@ -12,10 +12,11 @@ import com.konkon.onlinestore.product.search.service.utils.annotation.OrderConst
 import com.konkon.onlinestore.product.search.service.utils.annotation.ProductSortKeyConstraint;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import org.jboss.resteasy.reactive.ResponseStatus;
 
+import javax.inject.Inject;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Negative;
 import javax.validation.constraints.NotBlank;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -34,6 +35,7 @@ public class CategoryResource {
     private final CategoryConverter categoryConverter;
     private final ProductConverter productConverter;
 
+    @Inject
     public CategoryResource(CategoryUseCase categoryUseCase, ProductUseCase productUseCase, CategoryConverter categoryConverter, ProductConverter productConverter) {
         this.categoryUseCase = categoryUseCase;
         this.productUseCase = productUseCase;
@@ -48,7 +50,7 @@ public class CategoryResource {
             @PathParam("categoryId") Integer categoryId,
             @DefaultValue(value = "p.id") @QueryParam("sortKey") @ProductSortKeyConstraint String key,
             @DefaultValue(value = "ASC") @QueryParam("order") @OrderConstraint String order,
-            @DefaultValue(value = "10") @QueryParam("limit") @Negative @Max(100) Integer limit,
+            @DefaultValue(value = "10") @QueryParam("limit") @Min(1) @Max(100) Integer limit,
             @DefaultValue(value = "0") @QueryParam("offset") @Min(0) Integer offset
     ) {
         return productUseCase.searchProductsWithCategoryId(categoryId, key, order, limit, offset)
@@ -57,6 +59,7 @@ public class CategoryResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @ResponseStatus(201)
     public Uni<Boolean> createCategory(@NotBlank @QueryParam("name") String name) {
         return categoryUseCase.createCategory(Category.createBuild(name));
     }

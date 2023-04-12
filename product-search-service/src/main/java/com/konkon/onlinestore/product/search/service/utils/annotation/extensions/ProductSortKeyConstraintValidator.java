@@ -11,7 +11,7 @@ public class ProductSortKeyConstraintValidator implements ConstraintValidator<Pr
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (Objects.isNull(value)) return true;
-        String key = value.toUpperCase();
+        String key = value.toLowerCase();
         return Arrays.asList("p.id", "p.name", "price", "c.id").contains(key);
     }
 }

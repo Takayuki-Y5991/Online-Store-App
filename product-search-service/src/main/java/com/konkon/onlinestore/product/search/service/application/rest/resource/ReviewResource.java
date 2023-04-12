@@ -11,6 +11,7 @@ import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.reactive.ResponseStatus;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
@@ -27,6 +28,7 @@ public class ReviewResource {
     private final ReviewUseCase reviewUseCase;
     private final ReviewConverter reviewConverter;
 
+    @Inject
     public ReviewResource(ReviewUseCase reviewUseCase, ReviewConverter reviewConverter) {
         this.reviewUseCase = reviewUseCase;
         this.reviewConverter = reviewConverter;

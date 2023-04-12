@@ -74,6 +74,7 @@
             "format" : "int32",
             "default" : "10",
             "maximum" : 100,
+            "minimum" : 1,
             "type" : "integer"
           }
         }, {
@@ -127,6 +128,7 @@
             "format" : "int32",
             "default" : "10",
             "maximum" : 100,
+            "minimum" : 1,
             "type" : "integer"
           }
         }, {
@@ -381,8 +383,7 @@
             "type" : "string"
           },
           "price" : {
-            "maximum" : 0,
-            "exclusiveMaximum" : true,
+            "minimum" : 1,
             "type" : "number"
           },
           "description" : {
@@ -394,8 +395,7 @@
           },
           "categoryId" : {
             "format" : "int32",
-            "maximum" : 0,
-            "exclusiveMaximum" : true,
+            "minimum" : 1,
             "type" : "integer"
           }
         }
@@ -514,8 +514,7 @@
             "type" : "string"
           },
           "price" : {
-            "maximum" : 0,
-            "exclusiveMaximum" : true,
+            "minimum" : 1,
             "type" : "number"
           },
           "description" : {
@@ -527,14 +526,12 @@
           },
           "version" : {
             "format" : "int32",
-            "maximum" : 0,
-            "exclusiveMaximum" : true,
+            "minimum" : 1,
             "type" : "integer"
           },
           "categoryId" : {
             "format" : "int32",
-            "maximum" : 0,
-            "exclusiveMaximum" : true,
+            "minimum" : 1,
             "type" : "integer"
           }
         }

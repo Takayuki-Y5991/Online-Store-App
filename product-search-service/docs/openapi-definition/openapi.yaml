@@ -56,6 +56,7 @@ paths:
           format: int32
           default: "10"
           maximum: 100
+          minimum: 1
           type: integer
       - name: offset
         in: query
@@ -94,6 +95,7 @@ paths:
           format: int32
           default: "10"
           maximum: 100
+          minimum: 1
           type: integer
       - name: offset
         in: query
@@ -264,8 +266,7 @@ components:
           maxLength: 100
           type: string
         price:
-          maximum: 0
-          exclusiveMaximum: true
+          minimum: 1
           type: number
         description:
           type: string
@@ -274,8 +275,7 @@ components:
           type: string
         categoryId:
           format: int32
-          maximum: 0
-          exclusiveMaximum: true
+          minimum: 1
           type: integer
     CreateReviewRequest:
       required:
@@ -366,8 +366,7 @@ components:
           maxLength: 100
           type: string
         price:
-          maximum: 0
-          exclusiveMaximum: true
+          minimum: 1
           type: number
         description:
           type: string
@@ -376,13 +375,11 @@ components:
           type: string
         version:
           format: int32
-          maximum: 0
-          exclusiveMaximum: true
+          minimum: 1
           type: integer
         categoryId:
           format: int32
-          maximum: 0
-          exclusiveMaximum: true
+          minimum: 1
           type: integer
     UpdateReviewRequest:
       required:
